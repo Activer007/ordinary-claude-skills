@@ -12,6 +12,7 @@
 from typing import Dict, Union
 from . import utils
 from .skill_document import SkillDocument
+from .scoring_utils import smooth_score
 
 
 class ContentScorer:
@@ -116,15 +117,7 @@ class ContentScorer:
         # 使用场景数量（5分）
         use_cases = utils.extract_use_cases(content)
         use_case_count = len(use_cases)
-
-        if use_case_count >= 5:
-            score += 5
-        elif use_case_count >= 3:
-            score += 4
-        elif use_case_count >= 2:
-            score += 3
-        elif use_case_count >= 1:
-            score += 2
+        score += smooth_score(use_case_count, max_value=5, max_score=5)
 
         # 场景描述清晰度（3分）
         # 检查是否有具体的动词（designing, creating, implementing等）
@@ -160,14 +153,7 @@ class ContentScorer:
         else:
             code_blocks = utils.count_code_blocks(content)
 
-        if code_blocks >= 5:
-            score += 10
-        elif code_blocks >= 3:
-            score += 7
-        elif code_blocks >= 2:
-            score += 5
-        elif code_blocks >= 1:
-            score += 3
+        score += smooth_score(code_blocks, max_value=8, max_score=10)
 
         # 最佳实践说明（5分）
         if doc:
@@ -181,10 +167,8 @@ class ContentScorer:
             best_practice_count = utils.count_keyword_occurrences(
                 content, self.keywords['best_practices']
             )
-            if best_practice_count >= 3:
-                score += 4
-            elif best_practice_count >= 1:
-                score += 2
+            # 使用平滑评分，最多得 4 分（有专门章节得 5 分）
+            score += smooth_score(best_practice_count, max_value=5, max_score=4)
 
         # 设计模式或架构说明（4分）
         if doc:
@@ -224,12 +208,7 @@ class ContentScorer:
         else:
             sections_count = utils.count_sections(content)
 
-        if sections_count >= 6:
-            score += 6
-        elif sections_count >= 4:
-            score += 4
-        elif sections_count >= 2:
-            score += 2
+        score += smooth_score(sections_count, max_value=10, max_score=6)
 
         # 示例覆盖（4分）
         if doc:
@@ -242,10 +221,7 @@ class ContentScorer:
 
         if has_example:
             example_count = content.lower().count('example')
-            if example_count >= 3:
-                score += 4
-            elif example_count >= 1:
-                score += 2
+            score += smooth_score(example_count, max_value=5, max_score=4)
 
         # 常见陷阱/注意事项（3分）
         pitfall_keywords = ['pitfall', 'common mistake', 'avoid', 'caution',
