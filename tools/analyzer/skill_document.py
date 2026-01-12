@@ -7,7 +7,7 @@ SkillDocument 预处理层
 import json
 import re
 from pathlib import Path
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 from dataclasses import dataclass
 import yaml
 
@@ -104,7 +104,7 @@ class SkillDocument:
         except json.JSONDecodeError:
             return None
 
-    def _parse_frontmatter(self) -> tuple[Optional[Dict], str]:
+    def _parse_frontmatter(self) -> Tuple[Optional[Dict], str]:
         """
         解析 YAML 前置元数据
 
