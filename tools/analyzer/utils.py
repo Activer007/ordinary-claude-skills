@@ -251,13 +251,14 @@ def extract_use_cases(content: str) -> List[str]:
         使用场景列表
     """
     # 查找 "When to Use" 章节
-    pattern = r'(?:when to use|usage scenario).*?(?=\n#{1,6}|\Z)'
-    match = re.search(pattern, content, re.IGNORECASE | re.DOTALL)
+    # 仅从标题开始匹配章节内容
+    pattern = r'^#{1,6}\s+.*(?:when to use|usage scenario).*?\n(.*?)(?=\n#{1,6}|\Z)'
+    match = re.search(pattern, content, re.IGNORECASE | re.DOTALL | re.MULTILINE)
 
     if not match:
         return []
 
-    section_content = match.group()
+    section_content = match.group(1)
 
     # 提取列表项 (- 或 *)
     use_cases = re.findall(r'^[-*]\s+(.+)$', section_content, re.MULTILINE)

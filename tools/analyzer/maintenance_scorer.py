@@ -169,6 +169,11 @@ class MaintenanceScorer:
 
         try:
             updated_timestamp = metadata['updatedAt']
+            # 自动处理毫秒级时间戳
+            # 阈值 1e11 对应 1973-03-03（秒级）或 1970-01-02（毫秒级）
+            # 如果时间戳大于此值，认为是毫秒级时间戳，需转换为秒
+            if updated_timestamp > 1e11:
+                updated_timestamp = updated_timestamp / 1000
             updated_date = datetime.fromtimestamp(updated_timestamp)
             now = datetime.now()
             delta = now - updated_date

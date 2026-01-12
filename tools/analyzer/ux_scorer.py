@@ -7,8 +7,9 @@
 - 文档可读性（5分）：结构组织、平均行长度
 """
 
-from typing import Dict
+from typing import Dict, Union
 from . import utils
+from .skill_document import SkillDocument
 
 
 class UXScorer:
@@ -26,20 +27,35 @@ class UXScorer:
         self.analysis = config['analysis']
         self.keywords = config['keywords']
 
-    def score(self, content: str) -> Dict:
+    def score(self, content: Union[str, SkillDocument]) -> Dict:
         """
         计算用户体验评分
 
         Args:
-            content: SKILL.md 内容
+            content: SKILL.md 内容（字符串）或 SkillDocument 对象
 
         Returns:
             评分结果字典
         """
-        ease_score = self._score_ease_of_use(content)
-        readability_score = self._score_readability(content)
+        if isinstance(content, str):
+            doc = None
+            content_str = content
+        else:
+            doc = content
+            content_str = doc.markdown_body
+
+        ease_score = self._score_ease_of_use(content_str, doc)
+        readability_score = self._score_readability(content_str, doc)
 
         total = ease_score + readability_score
+
+        # 提取详细信息
+        if doc:
+            use_cases_count = len(utils.extract_use_cases(content_str))
+            sections_count = len(doc.sections)
+        else:
+            use_cases_count = len(utils.extract_use_cases(content_str))
+            sections_count = utils.count_sections(content_str)
 
         return {
             'total': total,
@@ -47,14 +63,14 @@ class UXScorer:
             'ease_of_use': ease_score,
             'readability': readability_score,
             'details': {
-                'has_quick_start': utils.check_keywords(content, self.keywords['quick_start']),
-                'use_cases_count': len(utils.extract_use_cases(content)),
-                'sections_count': utils.count_sections(content),
-                'avg_line_length': utils.calculate_avg_line_length(content),
+                'has_quick_start': utils.check_keywords(content_str, self.keywords['quick_start']),
+                'use_cases_count': use_cases_count,
+                'sections_count': sections_count,
+                'avg_line_length': utils.calculate_avg_line_length(content_str),
             }
         }
 
-    def _score_ease_of_use(self, content: str) -> int:
+    def _score_ease_of_use(self, content: str, doc: SkillDocument = None) -> int:
         """
         评分：易用性（5分）
 
@@ -64,6 +80,7 @@ class UXScorer:
 
         Args:
             content: SKILL.md 内容
+            doc: SkillDocument 对象
 
         Returns:
             易用性得分（0-5）
@@ -73,8 +90,8 @@ class UXScorer:
         # Quick Start 章节（3分）
         quick_start_keywords = self.keywords['quick_start']
 
-        if utils.has_section(content, 'Quick Start') or \
-           utils.has_section(content, 'Getting Started'):
+        if (doc and (doc.has_section('Quick Start') or doc.has_section('Getting Started'))) or \
+           (not doc and (utils.has_section(content, 'Quick Start') or utils.has_section(content, 'Getting Started'))):
             score += 3
         elif utils.check_keywords(content, quick_start_keywords):
             score += 2
@@ -87,7 +104,7 @@ class UXScorer:
 
         return min(score, self.weights['ease_of_use'])
 
-    def _score_readability(self, content: str) -> int:
+    def _score_readability(self, content: str, doc: SkillDocument = None) -> int:
         """
         评分：文档可读性（5分）
 
@@ -97,6 +114,7 @@ class UXScorer:
 
         Args:
             content: SKILL.md 内容
+            doc: SkillDocument 对象
 
         Returns:
             文档可读性得分（0-5）
@@ -116,7 +134,11 @@ class UXScorer:
             score += 1
 
         # 章节结构（2分）
-        sections_count = utils.count_sections(content)
+        if doc:
+            sections_count = len(doc.sections)
+        else:
+            sections_count = utils.count_sections(content)
+
         min_sections = self.analysis['min_sections_for_full_score']
 
         if sections_count >= min_sections:

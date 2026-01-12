@@ -11,6 +11,7 @@ from .content_scorer import ContentScorer
 from .technical_scorer import TechnicalScorer
 from .maintenance_scorer import MaintenanceScorer
 from .ux_scorer import UXScorer
+from .skill_document import SkillDocument
 
 
 class SkillAnalyzer:
@@ -42,18 +43,17 @@ class SkillAnalyzer:
             分析结果字典
         """
         try:
-            # 加载数据
-            content = utils.load_skill_content(self.skill_path)
-            metadata = utils.load_metadata(self.skill_path)
-
-            # 解析 YAML 前置元数据
-            yaml_metadata, markdown_content = utils.parse_yaml_frontmatter(content)
+            # 使用 SkillDocument 进行统一预处理
+            doc = SkillDocument(self.skill_path)
+            markdown_content = doc.markdown_body
+            metadata = doc.metadata
+            yaml_metadata = doc.yaml_frontmatter
 
             # 执行评分
-            content_score = self.content_scorer.score(markdown_content, metadata)
-            technical_score = self.technical_scorer.score(markdown_content)
+            content_score = self.content_scorer.score(doc, metadata)
+            technical_score = self.technical_scorer.score(doc)
             maintenance_score = self.maintenance_scorer.score(metadata, markdown_content)
-            ux_score = self.ux_scorer.score(markdown_content)
+            ux_score = self.ux_scorer.score(doc)
 
             # 计算总分
             total_score = (
