@@ -1,0 +1,519 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-12T19:53:17.821808",
+    "total_skills": 5,
+    "analysis_duration": 0.05
+  },
+  "summary": {
+    "average_score": 66.0,
+    "grade_distribution": {
+      "S": 0,
+      "A": 1,
+      "B": 0,
+      "C": 3,
+      "D": 1
+    }
+  },
+  "top_10_skills": [
+    {
+      "skill_name": "nodejs-backend-patterns",
+      "score": 80,
+      "grade": "A",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/nodejs-backend-patterns"
+    },
+    {
+      "skill_name": "omero-integration",
+      "score": 66,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/omero-integration"
+    },
+    {
+      "skill_name": "k8s-security-policies",
+      "score": 64,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/k8s-security-policies"
+    },
+    {
+      "skill_name": "prepare-changelog",
+      "score": 62,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/prepare-changelog"
+    },
+    {
+      "skill_name": "migrate-postgres-tables-to-hypertables",
+      "score": 58,
+      "grade": "D",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/migrate-postgres-tables-to-hypertables"
+    }
+  ],
+  "bottom_10_skills": [
+    {
+      "skill_name": "migrate-postgres-tables-to-hypertables",
+      "score": 58,
+      "grade": "D",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/migrate-postgres-tables-to-hypertables"
+    },
+    {
+      "skill_name": "prepare-changelog",
+      "score": 62,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/prepare-changelog"
+    },
+    {
+      "skill_name": "k8s-security-policies",
+      "score": 64,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/k8s-security-policies"
+    },
+    {
+      "skill_name": "omero-integration",
+      "score": 66,
+      "grade": "C",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/omero-integration"
+    },
+    {
+      "skill_name": "nodejs-backend-patterns",
+      "score": 80,
+      "grade": "A",
+      "path": "/root/workspace/ordinary-claude-skills/skills_all/nodejs-backend-patterns"
+    }
+  ],
+  "detailed_results": [
+    {
+      "skill_name": "omero-integration",
+      "skill_path": "/root/workspace/ordinary-claude-skills/skills_all/omero-integration",
+      "total_score": 66,
+      "grade": "C",
+      "scores": {
+        "content": {
+          "total": 33,
+          "max": 50,
+          "clarity": 11,
+          "technical_depth": 9,
+          "documentation": 8,
+          "actionability": 5,
+          "details": {
+            "has_when_to_use": false,
+            "use_cases_count": 8,
+            "code_blocks_count": 4,
+            "sections_count": 23,
+            "has_best_practices": true,
+            "has_step_by_step": true
+          }
+        },
+        "technical": {
+          "total": 16,
+          "max": 30,
+          "code_quality": 11,
+          "pattern_design": 2,
+          "error_handling": 3,
+          "details": {
+            "code_blocks_count": 4,
+            "has_security_keywords": true,
+            "design_patterns_found": [],
+            "has_error_handling": true
+          }
+        },
+        "maintenance": {
+          "total": 8,
+          "max": 10,
+          "update_frequency": 3,
+          "community_activity": 4,
+          "compatibility": 1,
+          "details": {
+            "has_metadata": true,
+            "days_since_update": 42,
+            "stars": 1609,
+            "has_version_info": false
+          }
+        },
+        "ux": {
+          "total": 9,
+          "max": 10,
+          "ease_of_use": 4,
+          "readability": 5,
+          "details": {
+            "has_quick_start": true,
+            "use_cases_count": 8,
+            "sections_count": 23,
+            "avg_line_length": 42.59659090909091
+          }
+        }
+      },
+      "metadata": {
+        "id": "k-dense-ai-claude-scientific-skills-scientific-skills-omero-integration-skill-md",
+        "name": "omero-integration",
+        "author": "K-Dense-AI",
+        "authorAvatar": "https://avatars.githubusercontent.com/u/238572432?v=4",
+        "description": "\"Microscopy data management platform. Access images via Python, retrieve datasets, analyze pixels, manage ROIs/annotations, batch processing, for high-content screening and microscopy workflows.\"",
+        "githubUrl": "https://github.com/K-Dense-AI/claude-scientific-skills/tree/main/scientific-skills/omero-integration",
+        "stars": 1609,
+        "forks": 193,
+        "updatedAt": 1764513414,
+        "hasMarketplace": true,
+        "path": "SKILL.md",
+        "branch": "main"
+      },
+      "yaml_metadata": {
+        "name": "omero-integration",
+        "description": "Microscopy data management platform. Access images via Python, retrieve datasets, analyze pixels, manage ROIs/annotations, batch processing, for high-content screening and microscopy workflows."
+      },
+      "recommendations": [
+        "添加 'When to Use' 章节，明确使用场景",
+        "添加设计模式或架构说明",
+        "添加版本兼容性说明"
+      ]
+    },
+    {
+      "skill_name": "prepare-changelog",
+      "skill_path": "/root/workspace/ordinary-claude-skills/skills_all/prepare-changelog",
+      "total_score": 62,
+      "grade": "C",
+      "scores": {
+        "content": {
+          "total": 34,
+          "max": 50,
+          "clarity": 3,
+          "technical_depth": 14,
+          "documentation": 12,
+          "actionability": 5,
+          "details": {
+            "has_when_to_use": false,
+            "use_cases_count": 0,
+            "code_blocks_count": 22,
+            "sections_count": 41,
+            "has_best_practices": true,
+            "has_step_by_step": true
+          }
+        },
+        "technical": {
+          "total": 14,
+          "max": 30,
+          "code_quality": 12,
+          "pattern_design": 0,
+          "error_handling": 2,
+          "details": {
+            "code_blocks_count": 22,
+            "has_security_keywords": true,
+            "design_patterns_found": [],
+            "has_error_handling": true
+          }
+        },
+        "maintenance": {
+          "total": 9,
+          "max": 10,
+          "update_frequency": 3,
+          "community_activity": 4,
+          "compatibility": 2,
+          "details": {
+            "has_metadata": true,
+            "days_since_update": 42,
+            "stars": 2704,
+            "has_version_info": true
+          }
+        },
+        "ux": {
+          "total": 5,
+          "max": 10,
+          "ease_of_use": 0,
+          "readability": 5,
+          "details": {
+            "has_quick_start": false,
+            "use_cases_count": 0,
+            "sections_count": 41,
+            "avg_line_length": 42.404371584699454
+          }
+        }
+      },
+      "metadata": {
+        "id": "nextest-rs-nextest-claude-skills-prepare-changelog-skill-md",
+        "name": "prepare-changelog",
+        "author": "nextest-rs",
+        "authorAvatar": "https://avatars.githubusercontent.com/u/99227291?v=4",
+        "description": "Guidelines for preparing changelog entries for nextest releases following Keep a Changelog format",
+        "githubUrl": "https://github.com/nextest-rs/nextest/tree/main/.claude/skills/prepare-changelog",
+        "stars": 2704,
+        "forks": 131,
+        "updatedAt": 1764577689,
+        "hasMarketplace": false,
+        "path": "SKILL.md",
+        "branch": "main"
+      },
+      "yaml_metadata": {
+        "name": "prepare-changelog",
+        "description": "Guidelines for preparing changelog entries for nextest releases following Keep a Changelog format"
+      },
+      "recommendations": [
+        "添加 'When to Use' 章节，明确使用场景",
+        "增加使用场景描述（建议至少3个）",
+        "添加设计模式或架构说明",
+        "添加 'Quick Start' 或 'Getting Started' 章节"
+      ]
+    },
+    {
+      "skill_name": "nodejs-backend-patterns",
+      "skill_path": "/root/workspace/ordinary-claude-skills/skills_all/nodejs-backend-patterns",
+      "total_score": 80,
+      "grade": "A",
+      "scores": {
+        "content": {
+          "total": 40,
+          "max": 50,
+          "clarity": 11,
+          "technical_depth": 16,
+          "documentation": 8,
+          "actionability": 5,
+          "details": {
+            "has_when_to_use": false,
+            "use_cases_count": 8,
+            "code_blocks_count": 19,
+            "sections_count": 27,
+            "has_best_practices": true,
+            "has_step_by_step": true
+          }
+        },
+        "technical": {
+          "total": 26,
+          "max": 30,
+          "code_quality": 15,
+          "pattern_design": 8,
+          "error_handling": 3,
+          "details": {
+            "code_blocks_count": 19,
+            "has_security_keywords": true,
+            "design_patterns_found": [
+              "factory",
+              "singleton",
+              "middleware",
+              "decorator",
+              "strategy"
+            ],
+            "has_error_handling": true
+          }
+        },
+        "maintenance": {
+          "total": 9,
+          "max": 10,
+          "update_frequency": 3,
+          "community_activity": 5,
+          "compatibility": 1,
+          "details": {
+            "has_metadata": true,
+            "days_since_update": 56,
+            "stars": 20990,
+            "has_version_info": false
+          }
+        },
+        "ux": {
+          "total": 5,
+          "max": 10,
+          "ease_of_use": 2,
+          "readability": 3,
+          "details": {
+            "has_quick_start": false,
+            "use_cases_count": 8,
+            "sections_count": 27,
+            "avg_line_length": 27.858501783590963
+          }
+        }
+      },
+      "metadata": {
+        "id": "wshobson-agents-plugins-javascript-typescript-skills-nodejs-backend-patterns-skill-md",
+        "name": "nodejs-backend-patterns",
+        "author": "wshobson",
+        "authorAvatar": "https://avatars.githubusercontent.com/u/553618?v=4",
+        "description": "Build production-ready Node.js backend services with Express/Fastify, implementing middleware patterns, error handling, authentication, database integration, and API design best practices. Use when creating Node.js servers, REST APIs, GraphQL backends, or microservices architectures.",
+        "githubUrl": "https://github.com/wshobson/agents/tree/main/plugins/javascript-typescript/skills/nodejs-backend-patterns",
+        "stars": 20990,
+        "forks": 2347,
+        "updatedAt": 1763343937,
+        "hasMarketplace": true,
+        "path": "SKILL.md",
+        "branch": "main"
+      },
+      "yaml_metadata": {
+        "name": "nodejs-backend-patterns",
+        "description": "Build production-ready Node.js backend services with Express/Fastify, implementing middleware patterns, error handling, authentication, database integration, and API design best practices. Use when creating Node.js servers, REST APIs, GraphQL backends, or microservices architectures."
+      },
+      "recommendations": [
+        "添加 'When to Use' 章节，明确使用场景",
+        "添加版本兼容性说明",
+        "添加 'Quick Start' 或 'Getting Started' 章节"
+      ]
+    },
+    {
+      "skill_name": "k8s-security-policies",
+      "skill_path": "/root/workspace/ordinary-claude-skills/skills_all/k8s-security-policies",
+      "total_score": 64,
+      "grade": "C",
+      "scores": {
+        "content": {
+          "total": 36,
+          "max": 50,
+          "clarity": 11,
+          "technical_depth": 12,
+          "documentation": 8,
+          "actionability": 5,
+          "details": {
+            "has_when_to_use": false,
+            "use_cases_count": 6,
+            "code_blocks_count": 16,
+            "sections_count": 32,
+            "has_best_practices": true,
+            "has_step_by_step": true
+          }
+        },
+        "technical": {
+          "total": 14,
+          "max": 30,
+          "code_quality": 12,
+          "pattern_design": 2,
+          "error_handling": 0,
+          "details": {
+            "code_blocks_count": 16,
+            "has_security_keywords": true,
+            "design_patterns_found": [],
+            "has_error_handling": false
+          }
+        },
+        "maintenance": {
+          "total": 9,
+          "max": 10,
+          "update_frequency": 3,
+          "community_activity": 5,
+          "compatibility": 1,
+          "details": {
+            "has_metadata": true,
+            "days_since_update": 56,
+            "stars": 20990,
+            "has_version_info": true
+          }
+        },
+        "ux": {
+          "total": 5,
+          "max": 10,
+          "ease_of_use": 2,
+          "readability": 3,
+          "details": {
+            "has_quick_start": false,
+            "use_cases_count": 6,
+            "sections_count": 32,
+            "avg_line_length": 22.986206896551725
+          }
+        }
+      },
+      "metadata": {
+        "id": "wshobson-agents-plugins-kubernetes-operations-skills-k8s-security-policies-skill-md",
+        "name": "k8s-security-policies",
+        "author": "wshobson",
+        "authorAvatar": "https://avatars.githubusercontent.com/u/553618?v=4",
+        "description": "Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC for production-grade security. Use when securing Kubernetes clusters, implementing network isolation, or enforcing pod security standards.",
+        "githubUrl": "https://github.com/wshobson/agents/tree/main/plugins/kubernetes-operations/skills/k8s-security-policies",
+        "stars": 20990,
+        "forks": 2347,
+        "updatedAt": 1763343937,
+        "hasMarketplace": true,
+        "path": "SKILL.md",
+        "branch": "main"
+      },
+      "yaml_metadata": {
+        "name": "k8s-security-policies",
+        "description": "Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC for production-grade security. Use when securing Kubernetes clusters, implementing network isolation, or enforcing pod security standards."
+      },
+      "recommendations": [
+        "添加 'When to Use' 章节，明确使用场景",
+        "添加设计模式或架构说明",
+        "完善错误处理示例和说明",
+        "添加 'Quick Start' 或 'Getting Started' 章节"
+      ]
+    },
+    {
+      "skill_name": "migrate-postgres-tables-to-hypertables",
+      "skill_path": "/root/workspace/ordinary-claude-skills/skills_all/migrate-postgres-tables-to-hypertables",
+      "total_score": 58,
+      "grade": "D",
+      "scores": {
+        "content": {
+          "total": 35,
+          "max": 50,
+          "clarity": 6,
+          "technical_depth": 14,
+          "documentation": 10,
+          "actionability": 5,
+          "details": {
+            "has_when_to_use": false,
+            "use_cases_count": 0,
+            "code_blocks_count": 18,
+            "sections_count": 25,
+            "has_best_practices": true,
+            "has_step_by_step": true
+          }
+        },
+        "technical": {
+          "total": 12,
+          "max": 30,
+          "code_quality": 9,
+          "pattern_design": 2,
+          "error_handling": 1,
+          "details": {
+            "code_blocks_count": 18,
+            "has_security_keywords": false,
+            "design_patterns_found": [],
+            "has_error_handling": true
+          }
+        },
+        "maintenance": {
+          "total": 6,
+          "max": 10,
+          "update_frequency": 3,
+          "community_activity": 2,
+          "compatibility": 1,
+          "details": {
+            "has_metadata": true,
+            "days_since_update": 47,
+            "stars": 89,
+            "has_version_info": false
+          }
+        },
+        "ux": {
+          "total": 5,
+          "max": 10,
+          "ease_of_use": 0,
+          "readability": 5,
+          "details": {
+            "has_quick_start": false,
+            "use_cases_count": 0,
+            "sections_count": 25,
+            "avg_line_length": 40.41616766467066
+          }
+        }
+      },
+      "metadata": {
+        "id": "timescale-pg-aiguide-skills-migrate-postgres-tables-to-hypertables-skill-md",
+        "name": "migrate-postgres-tables-to-hypertables",
+        "author": "timescale",
+        "authorAvatar": "https://avatars.githubusercontent.com/u/8986001?v=4",
+        "description": "Comprehensive guide for migrating PostgreSQL tables to TimescaleDB hypertables with optimal configuration and performance validation",
+        "githubUrl": "https://github.com/timescale/pg-aiguide/tree/main/skills/migrate-postgres-tables-to-hypertables",
+        "stars": 89,
+        "forks": 5,
+        "updatedAt": 1764098695,
+        "hasMarketplace": true,
+        "path": "SKILL.md",
+        "branch": "main"
+      },
+      "yaml_metadata": {
+        "name": "migrate-postgres-tables-to-hypertables",
+        "description": "Comprehensive guide for migrating PostgreSQL tables to TimescaleDB hypertables with optimal configuration and performance validation"
+      },
+      "recommendations": [
+        "添加 'When to Use' 章节，明确使用场景",
+        "增加使用场景描述（建议至少3个）",
+        "添加安全性考虑说明（输入验证、权限控制等）",
+        "添加设计模式或架构说明",
+        "添加版本兼容性说明",
+        "添加 'Quick Start' 或 'Getting Started' 章节"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "version": "1.0",
+  "description": "Skills 质量评分权重配置",
+  "weights": {
+    "content_quality": {
+      "total": 50,
+      "clarity": 13,
+      "technical_depth": 19,
+      "documentation": 13,
+      "actionability": 5
+    },
+    "technical_implementation": {
+      "total": 30,
+      "code_quality": 15,
+      "pattern_design": 10,
+      "error_handling": 5
+    },
+    "maintenance": {
+      "total": 10,
+      "update_frequency": 3,
+      "community_activity": 5,
+      "compatibility": 2
+    },
+    "user_experience": {
+      "total": 10,
+      "ease_of_use": 5,
+      "readability": 5
+    }
+  },
+  "grade_thresholds": {
+    "S": 90,
+    "A": 80,
+    "B": 70,
+    "C": 60,
+    "D": 0
+  },
+  "keywords": {
+    "when_to_use": ["when to use", "use when", "usage scenario", "适用场景"],
+    "best_practices": ["best practice", "recommended", "should", "最佳实践"],
+    "security": ["validate", "sanitize", "escape", "auth", "security", "安全"],
+    "patterns": ["factory", "singleton", "observer", "middleware", "decorator", "strategy"],
+    "error_handling": ["error", "exception", "try", "catch", "handling", "错误处理"],
+    "quick_start": ["quick start", "getting started", "快速开始", "入门"]
+  },
+  "analysis": {
+    "min_code_blocks_for_full_score": 5,
+    "min_sections_for_full_score": 6,
+    "ideal_avg_line_length_min": 40,
+    "ideal_avg_line_length_max": 100,
+    "recent_update_days": 90,
+    "active_update_days": 180
+  },
+  "stars_thresholds": {
+    "excellent": 10000,
+    "good": 1000,
+    "fair": 100
+  }
+}

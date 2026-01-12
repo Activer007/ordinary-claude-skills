@@ -1,0 +1,8 @@
+# 报告目录
+
+此目录用于存放评分分析报告。
+
+## 报告类型
+
+- `analysis_YYYYMMDD_HHMMSS.json` - JSON 格式的详细评分数据
+- `summary_YYYYMMDD_HHMMSS.md` - Markdown 格式的总结说明
