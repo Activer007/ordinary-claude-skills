@@ -125,7 +125,7 @@ def count_sections(content: str) -> int:
 
 def has_section(content: str, section_name: str) -> bool:
     """
-    检查是否存在指定章节
+    检查是否存在指定章节（支持模糊匹配和常见变体）
 
     Args:
         content: Markdown 内容
@@ -134,8 +134,57 @@ def has_section(content: str, section_name: str) -> bool:
     Returns:
         是否存在该章节
     """
-    pattern = rf'^#{1,6}\s+.*{re.escape(section_name)}.*$'
-    return bool(re.search(pattern, content, re.MULTILINE | re.IGNORECASE))
+    # 定义常见章节名称变体
+    section_variants = {
+        'When to Use': [
+            'when to use',
+            'when to use this skill',
+            'usage scenario',
+            'use cases',
+            'when should',
+            '使用场景',
+            '适用场景'
+        ],
+        'Quick Start': [
+            'quick start',
+            'getting started',
+            'quickstart',
+            'get started',
+            '快速开始',
+            '入门'
+        ],
+        'Best Practice': [
+            'best practice',
+            'best practices',
+            'recommendations',
+            'guidelines',
+            '最佳实践',
+            '建议'
+        ],
+        'Example': [
+            'example',
+            'examples',
+            'usage example',
+            '示例',
+            '用法示例'
+        ],
+    }
+
+    # 获取要检查的变体列表
+    patterns_to_check = [section_name.lower()]
+    if section_name in section_variants:
+        patterns_to_check.extend(section_variants[section_name])
+
+    # 对每个变体进行匹配
+    for variant in patterns_to_check:
+        # 使用简单匹配，章节名称通常不包含特殊字符
+        # 例如："When to Use" 可以匹配 "When to Use This Skill"
+        # 注意：不能用 rf-string，因为 {1,6} 会被误解析
+        pattern = r'^#{1,6}\s+.*' + re.escape(variant) + r'.*$'
+        if re.search(pattern, content, re.MULTILINE | re.IGNORECASE):
+            return True
+
+    return False
 
 
 def check_keywords(content: str, keywords: List[str]) -> bool:
