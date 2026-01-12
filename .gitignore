@@ -61,7 +61,7 @@ Thumbs.db
 Desktop.ini
 
 # --- Python ---
-*.py
+# *.py  # 注释掉，允许 .py 文件被 git 跟踪
 __pycache__/
 *.pyc
 *.pyo
@@ -84,3 +84,4 @@ venv/
 Uncomment these if you want to stop tracking the old attempts
 SKILLS_README.md
 skills.md
+check-result.md
