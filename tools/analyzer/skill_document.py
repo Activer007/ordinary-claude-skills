@@ -69,7 +69,6 @@ class SkillDocument:
         # 懒加载缓存
         self._sections = None
         self._code_blocks = None
-        self._headings = None
 
     def _load_content(self) -> str:
         """

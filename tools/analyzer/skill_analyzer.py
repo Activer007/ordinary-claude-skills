@@ -51,9 +51,9 @@ class SkillAnalyzer:
 
             # 执行评分
             content_score = self.content_scorer.score(doc, metadata)
-            technical_score = self.technical_scorer.score(markdown_content)
+            technical_score = self.technical_scorer.score(doc)
             maintenance_score = self.maintenance_scorer.score(metadata, markdown_content)
-            ux_score = self.ux_scorer.score(markdown_content)
+            ux_score = self.ux_scorer.score(doc)
 
             # 计算总分
             total_score = (
