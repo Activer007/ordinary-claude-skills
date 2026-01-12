@@ -212,8 +212,8 @@ class SkillDocument:
         Returns:
             CodeBlock 对象列表
         """
-        # 匹配代码块: ```language\ncode\n```
-        pattern = r'```(\w*)\n(.*?)```'
+        # 兼容语言标识符后的空格
+        pattern = r'```(\w*)[ \t]*\n(.*?)```'
         blocks = []
 
         for match in re.finditer(pattern, self.markdown_body, re.DOTALL):

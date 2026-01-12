@@ -169,6 +169,9 @@ class MaintenanceScorer:
 
         try:
             updated_timestamp = metadata['updatedAt']
+            # 自动处理毫秒级时间戳
+            if updated_timestamp > 1e11:
+                updated_timestamp /= 1000
             updated_date = datetime.fromtimestamp(updated_timestamp)
             now = datetime.now()
             delta = now - updated_date
