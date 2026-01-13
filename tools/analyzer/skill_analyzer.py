@@ -5,7 +5,7 @@ Skill 质量分析器主类
 """
 
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 from . import utils
 from .content_scorer import ContentScorer
 from .technical_scorer import TechnicalScorer
@@ -34,6 +34,44 @@ class SkillAnalyzer:
         self.technical_scorer = TechnicalScorer(config)
         self.maintenance_scorer = MaintenanceScorer(config)
         self.ux_scorer = UXScorer(config)
+
+    @classmethod
+    def from_github_url(cls, url: str, config: Optional[Dict] = None, cache_dir: Optional[Path] = None):
+        """
+        从 GitHub URL 创建分析器
+
+        Args:
+            url: GitHub 仓库 URL
+                格式: https://github.com/user/repo/tree/branch/path/to/skill
+            config: 配置字典，默认自动加载
+            cache_dir: 缓存目录，默认为系统临时目录
+
+        Returns:
+            SkillAnalyzer 实例
+
+        Raises:
+            ValueError: 如果 URL 格式无效
+            requests.exceptions.RequestException: 如果下载失败
+
+        Example:
+            >>> analyzer = SkillAnalyzer.from_github_url(
+            ...     "https://github.com/anthropics/claude-cookbooks/tree/main/skills/custom_skills/applying-brand-guidelines"
+            ... )
+            >>> result = analyzer.analyze()
+        """
+        from .github_fetcher import GitHubSkillFetcher
+
+        # 加载默认配置
+        if config is None:
+            config_path = Path(__file__).parent.parent / 'config' / 'scoring_weights.json'
+            config = utils.load_config(config_path)
+
+        # 下载技能
+        fetcher = GitHubSkillFetcher(cache_dir)
+        skill_path = fetcher.download_skill(url)
+
+        # 创建并返回分析器实例
+        return cls(skill_path, config)
 
     def analyze(self) -> Dict:
         """

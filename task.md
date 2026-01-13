@@ -4,18 +4,20 @@
 
 ```
 tools/analyzer/
-├── skill_document.py      # 预处理层（懒加载 + 缓存）
-├── content_scorer.py      # 内容质量评分（50分）
-├── technical_scorer.py    # 技术实现评分（30分）
-├── maintenance_scorer.py  # 维护性评分（10分）
+├── github_fetcher.py     # GitHub 下载器（URL 解析 + 下载）
+├── skill_document.py     # 预处理层（懒加载 + 缓存）
+├── content_scorer.py     # 内容质量评分（50分）
+├── technical_scorer.py   # 技术实现评分（30分）
+├── maintenance_scorer.py # 维护性评分（10分）
 ├── ux_scorer.py          # 用户体验评分（10分）
 └── config_loader.py      # 配置管理
 
 tools/scripts/
-└── analyze_all_skills.py # 批量分析脚本
+├── analyze_all_skills.py     # 本地批量分析脚本
+└── analyze_github_skill.py   # GitHub 在线分析工具
 
 tools/config/
-└── scoring.yml           # 评分参数配置
+└── scoring.yml            # 评分参数配置
 ```
 
 ---
@@ -41,6 +43,12 @@ tools/config/
 | P3.2 章节匹配 | 13 个测试，误匹配率 0% | ✅ |
 | P3.3 配置化 | 15 个测试，完全向后兼容 | ✅ |
 | P3.4 性能基准 | 9 个基准测试，建立性能基线 | ✅ |
+
+### P4 任务：GitHub 在线分析（2026-01-13）
+- ✅ **GitHubSkillFetcher 类** - URL 解析 + 自动下载
+- ✅ **SkillAnalyzer 扩展** - from_github_url() 类方法
+- ✅ **命令行工具** - analyze_github_skill.py
+- ✅ **测试覆盖** - 单元测试 + 集成测试 + 端到端测试
 
 ---
 
@@ -161,6 +169,7 @@ D 级 (0-59):   151  (36.4%)  ⚠ 需改进
 - PR #6: P3.3 (配置化)
 - PR #7: P3.4 (性能基准)
 - PR #8: 生产部署（全量分析）
+- PR #9: GitHub 在线分析（当前分支）
 
 ---
 
@@ -171,6 +180,57 @@ D 级 (0-59):   151  (36.4%)  ⚠ 需改进
 3. **可维护性**: 配置化管理，便于调优
 4. **质量保障**: 92 个测试确保稳定性
 5. **监控能力**: 性能基准防止回退
+6. **GitHub 集成**: 支持直接分析 GitHub 上的技能（新增）
+
+---
+
+## 🔗 八、GitHub 在线分析功能
+
+### 功能特性
+- ✅ 直接从 GitHub URL 下载并分析技能
+- ✅ 支持单个 URL 和批量分析
+- ✅ 自动缓存机制，避免重复下载
+- ✅ 完整的评分报告和改进建议
+
+### 使用方法
+
+```bash
+# 激活虚拟环境
+source tools/.venv/bin/activate
+
+# 分析单个技能
+python tools/scripts/analyze_github_skill.py \
+  "https://github.com/anthropics/claude-cookbooks/tree/main/skills/custom_skills/applying-brand-guidelines"
+
+# 批量分析（从文件读取 URLs）
+python tools/scripts/analyze_github_skill.py --batch urls.txt
+
+# 保存结果到 JSON
+python tools/scripts/analyze_github_skill.py <URL> --output result.json
+
+# 清理缓存
+python tools/scripts/analyze_github_skill.py --clear-cache
+```
+
+### 编程接口
+
+```python
+from analyzer.skill_analyzer import SkillAnalyzer
+
+# 从 GitHub URL 创建分析器
+analyzer = SkillAnalyzer.from_github_url(
+    "https://github.com/user/repo/tree/main/skill-name"
+)
+
+# 执行分析
+result = analyzer.analyze()
+print(f"总分: {result['total_score']}/100")
+print(f"等级: {result['grade']}")
+```
+
+### 支持的 URL 格式
+- `https://github.com/user/repo/tree/branch/path/to/skill`
+- `https://github.com/user/repo/blob/branch/path/to/skill`
 
 ---
 
