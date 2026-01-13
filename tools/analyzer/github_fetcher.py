@@ -57,7 +57,9 @@ class GitHubSkillFetcher:
 
         # 正则匹配 GitHub URL
         # 支持 tree 和 blob 两种格式
-        pattern = r'github\.com/([^/]+)/([^/]+)/(?:tree|blob)/([^/]+)/(.+)'
+        # 修复：使用 ([^/\s]+) 匹配分支，但在匹配后分割分支和路径
+        # 对于分支名包含斜杠的情况，我们需要手动分割
+        pattern = r'github\.com/([^/]+)/([^/]+)/(?:tree|blob)/(.+)'
         match = re.search(pattern, url)
 
         if not match:
@@ -66,7 +68,16 @@ class GitHubSkillFetcher:
                 f"期望格式: https://github.com/user/repo/tree/branch/path/to/skill"
             )
 
-        user, repo, branch, path = match.groups()
+        user, repo, rest = match.groups()
+
+        # 分割分支和路径（第一个斜杠之前是分支，之后是路径）
+        # 例如: "feature/new-api/skills/test" → branch="feature/new-api", path="skills/test"
+        # 例如: "main" → branch="main", path=""
+        if '/' in rest:
+            branch, path = rest.split('/', 1)
+        else:
+            branch = rest
+            path = ''
 
         return {
             'user': user,
@@ -128,17 +139,28 @@ class GitHubSkillFetcher:
             print(f"❌ {description} 下载失败: {e}")
             raise
 
-    def download_skill(self, url: str) -> Path:
+    def download_skill(self, url: str, force_refresh: bool = False) -> Path:
         """
         下载技能到缓存目录
 
         Args:
             url: GitHub 仓库 URL
+            force_refresh: 是否强制重新下载（忽略缓存）
 
         Returns:
             本地缓存路径
+
+        Raises:
+            FileNotFoundError: 如果 SKILL.md 下载失败
         """
         skill_url, metadata_url, skill_name = self.get_raw_urls(url)
+
+        # 检查缓存（除非强制刷新）
+        if not force_refresh:
+            cached_path = self.get_cache_path(skill_name)
+            if cached_path:
+                print(f"✅ 使用缓存: {cached_path}")
+                return cached_path
 
         # 创建缓存目录
         cache_path = self.cache_dir / skill_name
@@ -146,7 +168,13 @@ class GitHubSkillFetcher:
 
         # 下载 SKILL.md（必需）
         skill_file = cache_path / "SKILL.md"
-        self.download_file(skill_url, skill_file, "SKILL.md")
+        if not self.download_file(skill_url, skill_file, "SKILL.md"):
+            # 清理失败的缓存目录
+            shutil.rmtree(cache_path)
+            raise FileNotFoundError(
+                f"必需文件 SKILL.md 下载失败或不存在: {skill_url}\n"
+                f"请检查 URL 是否正确"
+            )
 
         # 尝试下载 metadata.json（可选）
         metadata_file = cache_path / "metadata.json"

@@ -36,7 +36,7 @@ class SkillAnalyzer:
         self.ux_scorer = UXScorer(config)
 
     @classmethod
-    def from_github_url(cls, url: str, config: Optional[Dict] = None, cache_dir: Optional[Path] = None):
+    def from_github_url(cls, url: str, config: Optional[Dict] = None, cache_dir: Optional[Path] = None, force_refresh: bool = False):
         """
         从 GitHub URL 创建分析器
 
@@ -45,6 +45,7 @@ class SkillAnalyzer:
                 格式: https://github.com/user/repo/tree/branch/path/to/skill
             config: 配置字典，默认自动加载
             cache_dir: 缓存目录，默认为系统临时目录
+            force_refresh: 是否强制重新下载（忽略缓存）
 
         Returns:
             SkillAnalyzer 实例
@@ -52,6 +53,7 @@ class SkillAnalyzer:
         Raises:
             ValueError: 如果 URL 格式无效
             requests.exceptions.RequestException: 如果下载失败
+            FileNotFoundError: 如果 SKILL.md 不存在
 
         Example:
             >>> analyzer = SkillAnalyzer.from_github_url(
@@ -61,14 +63,16 @@ class SkillAnalyzer:
         """
         from .github_fetcher import GitHubSkillFetcher
 
-        # 加载默认配置
+        # 加载默认配置（使用更可靠的路径解析）
         if config is None:
-            config_path = Path(__file__).parent.parent / 'config' / 'scoring_weights.json'
+            # 使用 resolve() 获取绝对路径，避免相对路径问题
+            config_dir = Path(__file__).resolve().parent.parent / 'config'
+            config_path = config_dir / 'scoring_weights.json'
             config = utils.load_config(config_path)
 
-        # 下载技能
+        # 下载技能（传递 force_refresh 参数）
         fetcher = GitHubSkillFetcher(cache_dir)
-        skill_path = fetcher.download_skill(url)
+        skill_path = fetcher.download_skill(url, force_refresh=force_refresh)
 
         # 创建并返回分析器实例
         return cls(skill_path, config)
