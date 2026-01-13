@@ -80,6 +80,47 @@ categories include:
 
 <img width="1920" height="914" alt="page" src="https://github.com/user-attachments/assets/1fa2d35e-5c58-46a3-ac21-e6548853559b" />
 
+## quality analysis
+
+this repo now includes comprehensive quality analysis of all 415 skills.
+
+**latest analysis (2026-01-13):**
+*   **average score:** 61.6/100
+*   **high-quality skills (A-level):** 43 (10.4%)
+*   **needs improvement (D-level):** 151 (36.4%)
+
+**view reports:**
+*   [analysis summary](reports/skills_analysis_summary.md) - readable overview with statistics and rankings
+*   [top 100 skills](reports/top_100_skills.md) - best quality recommendations
+*   [improvement candidates](reports/improvement_candidates.md) - 151 skills needing work with specific suggestions
+
+**run your own analysis:**
+```bash
+cd tools
+source .venv/bin/activate
+python scripts/analyze_all_skills.py
+```
+
+see [tools/scripts/README.md](tools/scripts/README.md) for full documentation on the analysis system.
+
+**scoring dimensions:**
+*   **content quality (50pts):** clarity, technical depth, documentation completeness
+*   **technical implementation (30pts):** code quality, design patterns, error handling
+*   **maintenance (10pts):** update frequency, community activity
+*   **user experience (10pts):** ease of use, readability
+
+**top 10 highest-quality skills:**
+1. python-packaging (88/100)
+2. python-testing-patterns (87/100)
+3. code-review-excellence (86/100)
+4. biopython (85/100)
+5. fda-database (84/100)
+6. gpt5-consultant (84/100)
+7. nodejs-backend-patterns (84/100)
+8. spec-kit-skill (84/100)
+9. api-design-principles (83/100)
+10. auth-implementation-patterns (83/100)
+
 ## configuration
 
 getting this to work depends on your environment. here is the recommended way to set things up if you are using mcp or a local client.
