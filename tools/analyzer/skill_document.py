@@ -23,7 +23,11 @@ class Section:
 
     def matches(self, name: str) -> bool:
         """
-        检查章节名称是否匹配（不区分大小写，部分匹配）
+        检查章节名称是否匹配（不区分大小写，使用词边界）
+
+        使用词边界匹配避免部分单词误匹配：
+        - "When to Use" 匹配 "When to Use This Skill" ✓
+        - "Use" 不匹配 "Reuse Patterns" ✗
 
         Args:
             name: 要匹配的名称
@@ -31,9 +35,18 @@ class Section:
         Returns:
             是否匹配
         """
+        # 过滤空字符串和纯空白字符串
+        if not name or not name.strip():
+            return False
+
         title_lower = self.title.lower()
         name_lower = name.lower()
-        return name_lower in title_lower or title_lower in name_lower
+
+        # 使用词边界避免部分单词匹配
+        # \b 确保匹配的是完整单词，而不是单词的一部分
+        # 允许末尾有可选的 's' 以支持单复数匹配 (e.g. "Example" 匹配 "Examples")
+        pattern = r'\b' + re.escape(name_lower) + r's?\b'
+        return bool(re.search(pattern, title_lower))
 
 
 @dataclass
