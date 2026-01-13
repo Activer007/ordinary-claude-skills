@@ -10,6 +10,7 @@
 """
 
 from typing import Dict, Union
+import re
 from . import utils
 from .skill_document import SkillDocument
 from .scoring_utils import smooth_score
@@ -133,9 +134,10 @@ class ContentScorer:
         评分：技术深度（19分）
 
         检查项：
-        - 代码示例数量（10分，5个以上满分）
+        - 代码示例数量（7分）
         - 最佳实践说明（5分）
         - 设计模式或架构说明（4分）
+        - 输入/输出示例配对（3分）
 
         Args:
             content: SKILL.md 内容
@@ -146,14 +148,15 @@ class ContentScorer:
         """
         score = 0
 
-        # 代码示例数量（10分）
+        # 代码示例数量（7分）
         # 优先使用预处理数据
         if doc:
             code_blocks = len(doc.code_blocks)
         else:
             code_blocks = utils.count_code_blocks(content)
 
-        score += smooth_score(code_blocks, max_value=8, max_score=10)
+        # 调整为满分7分 (>=5 -> 7, >=3 -> 5, >=1 -> 2)
+        score += smooth_score(code_blocks, max_value=8, max_score=7)
 
         # 最佳实践说明（5分）
         if doc:
@@ -181,7 +184,27 @@ class ContentScorer:
         elif utils.check_keywords(content, self.keywords['patterns']):
             score += 2
 
+        # 输入/输出示例配对（3分）
+        score += self._score_input_output_examples(content)
+
         return min(score, self.weights['technical_depth'])
+
+    def _score_input_output_examples(self, content: str) -> int:
+        """
+        评分：输入/输出示例配对（3分）
+        """
+        patterns = [
+            r'input.*?:.*?output',
+            r'example.*?input.*?example.*?output',
+            r'request.*?response',
+            r'before.*?after',
+            r'>>>', # Python REPL style
+        ]
+        
+        for pattern in patterns:
+            if re.search(pattern, content, re.IGNORECASE | re.DOTALL):
+                return 3
+        return 0
 
     def _score_documentation(self, content: str, doc: SkillDocument = None) -> int:
         """

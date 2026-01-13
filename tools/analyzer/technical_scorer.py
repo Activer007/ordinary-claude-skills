@@ -78,9 +78,10 @@ class TechnicalScorer:
         评分：代码示例质量（15分）
 
         检查项：
-        - 代码块数量和长度（8分）
-        - 安全性关键词（4分）
-        - 错误处理在代码中（3分）
+        - 代码块数量（5分）
+        - 代码多样性（3分）
+        - 示例质量（4分）
+        - 安全性关键词（3分）
 
         Args:
             content: SKILL.md 内容
@@ -91,7 +92,7 @@ class TechnicalScorer:
         """
         score = 0
 
-        # 代码块数量和长度（8分）
+        # 1. 代码块数量（5分）
         if doc:
             code_block_count = len(doc.code_blocks)
         else:
@@ -99,37 +100,69 @@ class TechnicalScorer:
             code_block_count = len(code_blocks)
 
         if code_block_count >= 5:
-            score += 8
+            score += 5
         elif code_block_count >= 3:
-            score += 6
-        elif code_block_count >= 2:
-            score += 4
-        elif code_block_count >= 1:
-            score += 2
-
-        # 安全性关键词（4分）
-        security_keywords = self.keywords['security']
-
-        if utils.check_keywords(content, security_keywords):
-            security_count = utils.count_keyword_occurrences(content, security_keywords)
-            if security_count >= 3:
-                score += 4
-            elif security_count >= 1:
-                score += 2
-
-        # 错误处理在代码中（3分）
-        # 检查代码块中是否有 try/catch, error handling 等
-        if doc:
-            has_try_catch = any(b.has_error_handling for b in doc.code_blocks)
-        else:
-            has_try_catch = 'try' in content.lower() and ('catch' in content.lower() or 'except' in content.lower())
-
-        if has_try_catch:
             score += 3
-        elif 'error' in content.lower():
+        elif code_block_count >= 1:
             score += 1
 
+        # 如果有预处理文档，进行深度分析
+        if doc:
+            # 2. 代码多样性（3分）
+            score += self._score_code_diversity(doc)
+
+            # 3. 示例质量（4分）
+            score += min(self._score_example_quality(doc), 4)
+
+        # 4. 安全性关键词（3分）
+        security_keywords = self.keywords['security']
+        if utils.check_keywords(content, security_keywords):
+            score += 3
+
         return min(score, self.weights['code_quality'])
+
+    def _score_code_diversity(self, doc: SkillDocument) -> int:
+        """
+        评分：代码语言多样性（3分）
+        """
+        if not doc.code_blocks:
+            return 0
+            
+        languages = set(b.language.lower() for b in doc.code_blocks 
+                       if b.language and b.language.lower() != 'unknown')
+        
+        if len(languages) >= 3:
+            return 3
+        elif len(languages) >= 2:
+            return 2
+        elif len(languages) >= 1:
+            return 1
+        return 0
+
+    def _score_example_quality(self, doc: SkillDocument) -> int:
+        """
+        评分：示例代码质量（原始分最高5分，外部限制为4分）
+        """
+        if not doc.code_blocks:
+            return 0
+            
+        score = 0
+        # 有完整的函数/类定义
+        if any(b.is_complete for b in doc.code_blocks):
+            score += 2
+
+        # 有注释说明
+        if any(b.has_comments for b in doc.code_blocks):
+            score += 1
+
+        # 代码长度适中（10-50行为佳）
+        good_length_blocks = [b for b in doc.code_blocks if 10 <= b.line_count <= 50]
+        if len(good_length_blocks) >= 2:
+            score += 2
+        elif len(good_length_blocks) >= 1:
+            score += 1
+
+        return score
 
     def _score_pattern_design(self, content: str, doc: SkillDocument = None) -> int:
         """
