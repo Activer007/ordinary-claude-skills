@@ -35,8 +35,6 @@ class Section:
         Returns:
             是否匹配
         """
-        import re
-
         # 过滤空字符串和纯空白字符串
         if not name or not name.strip():
             return False
@@ -46,7 +44,8 @@ class Section:
 
         # 使用词边界避免部分单词匹配
         # \b 确保匹配的是完整单词，而不是单词的一部分
-        pattern = r'\b' + re.escape(name_lower) + r'\b'
+        # 允许末尾有可选的 's' 以支持单复数匹配 (e.g. "Example" 匹配 "Examples")
+        pattern = r'\b' + re.escape(name_lower) + r's?\b'
         return bool(re.search(pattern, title_lower))
 
 

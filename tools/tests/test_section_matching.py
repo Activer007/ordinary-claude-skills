@@ -158,7 +158,7 @@ class TestSectionMatching:
         """测试单词章节"""
         test_cases = [
             ("Examples", "Examples", True),
-            ("Examples", "Example", False),  # 不完全匹配
+            ("Examples", "Example", True),   # 支持单数匹配复数章节
             ("Installation", "Installation", True),
             ("Installation", "Install", False),  # 部分单词
             ("Usage", "Usage", True),
