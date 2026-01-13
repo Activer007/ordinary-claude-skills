@@ -71,4 +71,5 @@ echo "example3"
         assert result['details']['code_blocks_count'] == 3
 
         # 技术深度分应该较高（有3个代码块）
-        assert result['technical_depth'] > 5
+        # 新规则下：3个代码块约得4分 (max 7) + 0 (Best Practice) + 0 (Pattern) + 0 (Input/Output)
+        assert result['technical_depth'] > 3
