@@ -1,0 +1,108 @@
+# Scoring Configuration for Ordinary Claude Skills Analyzer
+# ============================================================
+# 此文件定义了评分系统中所有 smooth_score 函数的参数配置
+#
+# 参数说明：
+# - max_value: 被评估值达到此值时视为"充分"，可获得满分
+# - max_score: 该项评分的最高分值
+# - description: 参数说明，便于理解和调优
+#
+# 更新日期：2026-01-13
+
+# ============================================================
+# 内容质量评分 (ContentScorer)
+# ============================================================
+content_quality:
+  # 清晰度评分 (Clarity)
+  clarity:
+    use_cases:
+      max_value: 5
+      max_score: 5
+      description: "使用场景数量评分 - 5个使用场景视为充分"
+      context: "用于评估 SKILL.md 中明确列出的应用场景数量"
+
+  # 技术深度评分 (Technical Depth)
+  technical_depth:
+    code_blocks:
+      max_value: 8
+      max_score: 7
+      description: "代码示例数量评分 - 8个代码块视为充分，最高得7分"
+      context: "衡量技能文档中提供的代码示例是否足够"
+
+    best_practices:
+      max_value: 5
+      max_score: 4
+      description: "最佳实践关键词评分 - 出现5次相关关键词可得4分"
+      context: "当没有专门的 Best Practice 章节时，通过关键词计数评分"
+
+  # 文档质量评分 (Documentation)
+  documentation:
+    sections:
+      max_value: 10
+      max_score: 6
+      description: "章节结构评分 - 10个章节视为结构完整"
+      context: "评估文档的组织结构是否合理（章节数量）"
+
+    examples:
+      max_value: 5
+      max_score: 4
+      description: "示例覆盖评分 - 5次提及示例视为充分"
+      context: "通过 example 关键词出现次数评估示例丰富度"
+
+
+# ============================================================
+# 技术实现评分 (TechnicalScorer)
+# ============================================================
+technical_implementation:
+  # 代码质量评分 (Code Quality)
+  code_quality:
+    code_block_count:
+      max_value: 5
+      max_score: 5
+      description: "代码块数量评分 - 5个代码块视为充分"
+      context: "基础的代码块计数，用于判断是否提供足够的代码示例"
+
+
+# ============================================================
+# 维护性评分 (MaintenanceScorer)
+# ============================================================
+# 注意：当前 MaintenanceScorer 未使用 smooth_score
+# 此部分为预留扩展
+maintenance:
+  # 预留配置项
+  placeholder: {}
+
+
+# ============================================================
+# 用户体验评分 (UXScorer)
+# ============================================================
+# 注意：当前 UXScorer 未使用 smooth_score
+# 此部分为预留扩展
+user_experience:
+  # 预留配置项
+  placeholder: {}
+
+
+# ============================================================
+# 通用配置
+# ============================================================
+general:
+  # 默认参数（当配置缺失时使用）
+  default_max_value: 5
+  default_max_score: 5
+
+  # 向后兼容模式（启用时，配置缺失不会报错）
+  backward_compatible: true
+
+  # 调试模式（启用时输出详细的评分计算过程）
+  debug_mode: false
+
+
+# ============================================================
+# 配置版本控制
+# ============================================================
+metadata:
+  version: "1.0.0"
+  created_at: "2026-01-13"
+  description: "初始版本 - 将所有硬编码的 max_value 参数迁移到配置文件"
+  author: "Ordinary Claude Skills Team"

@@ -592,62 +592,80 @@ def matches(self, name: str, strategy: MatchingStrategy = MatchingStrategy.WORD_
 
 **目标：** 将硬编码的评分参数移至配置文件，便于调优
 
-**当前问题：**
-```python
-# tools/analyzer/content_scorer.py
-score += smooth_score(use_case_count, max_value=5, max_score=5)
-score += smooth_score(code_blocks, max_value=8, max_score=10)
-score += smooth_score(sections_count, max_value=10, max_score=6)
-```
+**✅ 实施完成（2026-01-13）**
 
-**改进方案：**
+**实施方案：**
+
+1. **创建配置文件** `tools/config/scoring.yml`
+   - 定义所有 smooth_score 函数的参数
+   - 包含详细的参数说明和上下文
+   - 支持分层配置结构
+
+2. **实现配置加载器** `tools/analyzer/config_loader.py`
+   - `ScoringConfig` 类：统一的配置管理接口
+   - 支持 YAML 文件加载和解析
+   - 默认值回退机制（向后兼容）
+   - 配置合并功能（支持部分覆盖）
+   - 全局单例模式（避免重复加载）
+
+3. **重构评分器**
+   - `ContentScorer`: 5 处硬编码参数 → 配置文件
+   - `TechnicalScorer`: 1 处硬编码参数 → 配置文件
+   - 保持向后兼容的构造函数签名
+
+4. **配置文件单元测试** `tools/tests/test_config_loader.py`
+   - 15 个测试用例，覆盖率 100%
+   - 测试配置加载、参数获取、默认值回退
+   - 测试向后兼容、配置合并、异常处理
+
+**验证结果：**
+- ✅ 所有硬编码参数成功移至配置文件
+- ✅ 配置文件包含详细说明和上下文
+- ✅ 完全向后兼容（配置缺失时使用默认值）
+- ✅ 测试通过率 100% (83/83 测试)
+- ✅ 实际评分结果一致性验证通过
+  - api-design-principles: 83/100 (A级)
+  - nodejs-backend-patterns: 84/100 (A级)
+
+**配置文件结构：**
 ```yaml
-# tools/config/scoring.yml (新增配置)
-smooth_scoring:
-  use_cases:
-    max_value: 5      # 5 个使用场景视为充分
-    max_score: 5
-    description: "使用场景数量评分"
+# tools/config/scoring.yml
+content_quality:
+  clarity:
+    use_cases:
+      max_value: 5
+      max_score: 5
+      description: "使用场景数量评分 - 5个使用场景视为充分"
+      context: "用于评估 SKILL.md 中明确列出的应用场景数量"
 
-  code_blocks:
-    max_value: 8      # 8 个代码块视为充分
-    max_score: 10
-    description: "代码块数量评分"
+  technical_depth:
+    code_blocks:
+      max_value: 8
+      max_score: 7
+      description: "代码示例数量评分 - 8个代码块视为充分，最高得7分"
 
-  sections:
-    max_value: 10     # 10 个章节视为完整
-    max_score: 6
-    description: "章节结构评分"
-
-  best_practices:
-    max_value: 5
-    max_score: 4
-    description: "最佳实践关键词评分"
+    best_practices:
+      max_value: 5
+      max_score: 4
+      description: "最佳实践关键词评分 - 出现5次相关关键词可得4分"
 ```
 
+**配置加载器用法：**
 ```python
-# tools/analyzer/content_scorer.py
-class ContentScorer:
-    def __init__(self, config: Dict):
-        self.smooth_params = config.get('smooth_scoring', {})
+from analyzer.config_loader import get_config
 
-    def _score_clarity(self, content: str, doc: SkillDocument = None) -> int:
-        # 从配置读取参数
-        use_case_params = self.smooth_params.get('use_cases', {
-            'max_value': 5, 'max_score': 5
-        })
+# 获取全局配置
+config = get_config()
 
-        score += smooth_score(
-            use_case_count,
-            max_value=use_case_params['max_value'],
-            max_score=use_case_params['max_score']
-        )
+# 获取评分参数
+params = config.get_smooth_params('content_quality', 'clarity', 'use_cases')
+# 返回: {'max_value': 5, 'max_score': 5}
+
+# 使用参数
+score += smooth_score(use_case_count, **params)
 ```
 
-**验收标准：**
-- 所有硬编码参数移至配置文件
-- 配置文件包含参数说明
-- 保持向后兼容（配置缺失时使用默认值）
+相关 PR: #6
 
 ---
 
