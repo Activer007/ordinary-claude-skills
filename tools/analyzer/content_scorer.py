@@ -9,26 +9,31 @@
 - 可操作性（5分）：step-by-step 指导
 """
 
-from typing import Dict, Union
+from typing import Dict, Union, Optional
 import re
 from . import utils
 from .skill_document import SkillDocument
 from .scoring_utils import smooth_score
+from .config_loader import ScoringConfig, get_config
 
 
 class ContentScorer:
     """内容质量评分器"""
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict, scoring_config: Optional[ScoringConfig] = None):
         """
         初始化评分器
 
         Args:
-            config: 配置字典
+            config: 配置字典（权重和关键词）
+            scoring_config: 评分参数配置（可选，默认使用全局配置）
         """
         self.config = config
         self.weights = config['weights']['content_quality']
         self.keywords = config['keywords']
+
+        # 加载评分参数配置
+        self.scoring_config = scoring_config or get_config()
 
     def score(self, content: Union[str, SkillDocument], metadata: Dict) -> Dict:
         """
@@ -118,7 +123,8 @@ class ContentScorer:
         # 使用场景数量（5分）
         use_cases = utils.extract_use_cases(content)
         use_case_count = len(use_cases)
-        score += smooth_score(use_case_count, max_value=5, max_score=5)
+        params = self.scoring_config.get_smooth_params('content_quality', 'clarity', 'use_cases')
+        score += smooth_score(use_case_count, **params)
 
         # 场景描述清晰度（3分）
         # 检查是否有具体的动词（designing, creating, implementing等）
@@ -156,7 +162,8 @@ class ContentScorer:
             code_blocks = utils.count_code_blocks(content)
 
         # 调整为满分7分 (>=5 -> 7, >=3 -> 5, >=1 -> 2)
-        score += smooth_score(code_blocks, max_value=8, max_score=7)
+        params = self.scoring_config.get_smooth_params('content_quality', 'technical_depth', 'code_blocks')
+        score += smooth_score(code_blocks, **params)
 
         # 最佳实践说明（5分）
         if doc:
@@ -171,7 +178,8 @@ class ContentScorer:
                 content, self.keywords['best_practices']
             )
             # 使用平滑评分，最多得 4 分（有专门章节得 5 分）
-            score += smooth_score(best_practice_count, max_value=5, max_score=4)
+            params = self.scoring_config.get_smooth_params('content_quality', 'technical_depth', 'best_practices')
+            score += smooth_score(best_practice_count, **params)
 
         # 设计模式或架构说明（4分）
         if doc:
@@ -230,7 +238,8 @@ class ContentScorer:
         else:
             sections_count = utils.count_sections(content)
 
-        score += smooth_score(sections_count, max_value=10, max_score=6)
+        params = self.scoring_config.get_smooth_params('content_quality', 'documentation', 'sections')
+        score += smooth_score(sections_count, **params)
 
         # 示例覆盖（4分）
         if doc:
@@ -243,7 +252,8 @@ class ContentScorer:
 
         if has_example:
             example_count = content.lower().count('example')
-            score += smooth_score(example_count, max_value=5, max_score=4)
+            params = self.scoring_config.get_smooth_params('content_quality', 'documentation', 'examples')
+            score += smooth_score(example_count, **params)
 
         # 常见陷阱/注意事项（3分）
         pitfall_keywords = ['pitfall', 'common mistake', 'avoid', 'caution',

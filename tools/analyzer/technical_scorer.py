@@ -8,24 +8,29 @@
 - 错误处理（5分）：异常处理覆盖
 """
 
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 from . import utils
 from .skill_document import SkillDocument
+from .config_loader import ScoringConfig, get_config
 
 
 class TechnicalScorer:
     """技术实现评分器"""
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict, scoring_config: Optional[ScoringConfig] = None):
         """
         初始化评分器
 
         Args:
-            config: 配置字典
+            config: 配置字典（权重和关键词）
+            scoring_config: 评分参数配置（可选，默认使用全局配置）
         """
         self.config = config
         self.weights = config['weights']['technical_implementation']
         self.keywords = config['keywords']
+
+        # 加载评分参数配置
+        self.scoring_config = scoring_config or get_config()
 
     def score(self, content: Union[str, SkillDocument]) -> Dict:
         """
@@ -100,7 +105,8 @@ class TechnicalScorer:
             code_blocks = utils.extract_code_blocks(content)
             code_block_count = len(code_blocks)
 
-        score += smooth_score(code_block_count, max_value=5, max_score=5)
+        params = self.scoring_config.get_smooth_params('technical_implementation', 'code_quality', 'code_block_count')
+        score += smooth_score(code_block_count, **params)
 
         # 2 & 3. 深度分析（多样性与质量）
         if doc:
