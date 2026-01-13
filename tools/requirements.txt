@@ -11,3 +11,4 @@ colorama>=0.4.0      # 彩色终端输出
 # 测试框架（可选）
 pytest>=7.4.0
 pytest-cov>=4.1.0
+pytest-benchmark>=4.0.0

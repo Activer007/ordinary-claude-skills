@@ -5,7 +5,10 @@
 用于监控性能改进效果，防止性能回退。
 
 运行方式：
-    # 运行所有基准测试
+    # 运行所有基准测试（包含内存测试）
+    pytest tools/tests/test_benchmark.py
+
+    # 仅运行性能基准测试（跳过内存测试）
     pytest tools/tests/test_benchmark.py --benchmark-only
 
     # 保存基线
