@@ -194,15 +194,14 @@ class ContentScorer:
         评分：输入/输出示例配对（3分）
         """
         patterns = [
-            r'input.*?:.*?output',
-            r'example.*?input.*?example.*?output',
-            r'request.*?response',
-            r'before.*?after',
-            r'>>>', # Python REPL style
+            r'input\s*:.*?\n\s*output\s*:',
+            r'request\s*:.*?\n\s*response\s*:',
+            r'before\s*:.*?\n\s*after\s*:',
+            r'>>>\s+', # Python REPL style
         ]
         
         for pattern in patterns:
-            if re.search(pattern, content, re.IGNORECASE | re.DOTALL):
+            if re.search(pattern, content, re.IGNORECASE | re.MULTILINE):
                 return 3
         return 0
 

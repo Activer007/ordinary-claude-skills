@@ -91,6 +91,7 @@ class TechnicalScorer:
             代码质量得分（0-15）
         """
         score = 0
+        from .scoring_utils import smooth_score
 
         # 1. 代码块数量（5分）
         if doc:
@@ -99,20 +100,23 @@ class TechnicalScorer:
             code_blocks = utils.extract_code_blocks(content)
             code_block_count = len(code_blocks)
 
-        if code_block_count >= 5:
-            score += 5
-        elif code_block_count >= 3:
-            score += 3
-        elif code_block_count >= 1:
-            score += 1
+        score += smooth_score(code_block_count, max_value=5, max_score=5)
 
-        # 如果有预处理文档，进行深度分析
+        # 2 & 3. 深度分析（多样性与质量）
         if doc:
-            # 2. 代码多样性（3分）
+            # 代码多样性（3分）
             score += self._score_code_diversity(doc)
 
-            # 3. 示例质量（4分）
-            score += min(self._score_example_quality(doc), 4)
+            # 示例质量（4分）
+            score += self._score_example_quality(doc)
+        else:
+            # Fallback for when doc is missing: provide basic scores if blocks exist
+            if code_block_count >= 3:
+                score += 2  # Diversity fallback
+                score += 2  # Quality fallback
+            elif code_block_count >= 1:
+                score += 1
+                score += 1
 
         # 4. 安全性关键词（3分）
         security_keywords = self.keywords['security']
@@ -141,7 +145,7 @@ class TechnicalScorer:
 
     def _score_example_quality(self, doc: SkillDocument) -> int:
         """
-        评分：示例代码质量（原始分最高5分，外部限制为4分）
+        评分：示例代码质量（4分）
         """
         if not doc.code_blocks:
             return 0
@@ -162,7 +166,7 @@ class TechnicalScorer:
         elif len(good_length_blocks) >= 1:
             score += 1
 
-        return score
+        return min(score, 4)
 
     def _score_pattern_design(self, content: str, doc: SkillDocument = None) -> int:
         """

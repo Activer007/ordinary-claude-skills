@@ -118,21 +118,25 @@ class TestNewScoringDimensions:
         # Completeness: +2
         # Comments: +1
         # Length: +2
-        # Total: 5
-        assert scorer._score_example_quality(doc) == 5
+        # Total: 5 -> capped at 4
+        assert scorer._score_example_quality(doc) == 4
 
     def test_score_input_output_examples(self, content_scorer):
-        # Match "input...output"
-        content = "Input: x. Output: y."
+        # Match "input...output" (newline required in new logic)
+        content = "Input: x\nOutput: y"
         assert content_scorer._score_input_output_examples(content) == 3
 
         # Match "request...response"
-        content = "Request: {}. Response: {}."
+        content = "Request: {}\nResponse: {}"
         assert content_scorer._score_input_output_examples(content) == 3
 
         # Match ">>>"
         content = ">>> print('hello')"
         assert content_scorer._score_input_output_examples(content) == 3
+
+        # No match (simple space-separated no longer matches to avoid greediness)
+        content = "Input: x. Output: y."
+        assert content_scorer._score_input_output_examples(content) == 0
 
         # No match
         content = "Just some text."
