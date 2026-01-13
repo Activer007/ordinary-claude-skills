@@ -6,6 +6,53 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 这是一个 Claude Skills 技能库聚合仓库,包含 600+ 个来自官方和社区的技能包。技能是预设的提示词包和脚本,用于教会 Claude 执行特定任务,无需每次重复解释上下文。
 
+## Python 虚拟环境
+
+**重要：** 项目的 Python 依赖使用虚拟环境管理，执行任何 Python 命令前必须先激活虚拟环境。
+
+### 激活虚拟环境
+
+```bash
+# 进入 tools 目录并激活虚拟环境
+cd tools
+source .venv/bin/activate
+
+# 激活后即可运行 Python 命令
+python -m pytest tests/
+python analyzer/skill_analyzer.py
+```
+
+### 使用示例
+
+```bash
+# ❌ 错误：未激活虚拟环境
+cd /root/workspace/ordinary-claude-skills
+python3 -m pytest tools/tests/
+
+# ✅ 正确：先激活虚拟环境
+cd /root/workspace/ordinary-claude-skills/tools
+source .venv/bin/activate
+python -m pytest tests/
+
+# 或者在一行命令中激活并执行
+source tools/.venv/bin/activate && python -m pytest tools/tests/
+```
+
+### 安装新依赖
+
+```bash
+cd tools
+source .venv/bin/activate
+pip install <package-name>
+pip freeze > requirements.txt  # 更新依赖列表
+```
+
+### 虚拟环境位置
+
+- **虚拟环境目录**: `tools/.venv/`
+- **Python 解释器**: `tools/.venv/bin/python`
+- **pip**: `tools/.venv/bin/pip`
+
 ## 仓库结构
 
 ```
