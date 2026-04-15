@@ -1,6 +1,6 @@
 ---
 name: blog-post-writer
-description: Transform brain dumps into polished blog posts in Nick Nisi's voice. Use when the user wants to write a blog post with scattered ideas, talking points, and conclusions that need organization into a cohesive narrative with Nick's conversational, authentic, and thoughtful tone.
+description: "Transform brain dumps into polished blog posts in Nick Nisi's voice. Organizes scattered notes into structured outlines, drafts section headers, weaves talking points into narrative flow, and polishes prose to match Nick's conversational tone. Use when the user has scattered ideas, talking points, and conclusions that need shaping into a cohesive, authentic blog post."
 ---
 
 # Nick Nisi Blog Writer
@@ -11,15 +11,7 @@ Transform unstructured brain dumps into polished blog posts that sound like Nick
 
 ### 1. Receive the Brain Dump
 
-Accept whatever the user provides:
-- Scattered thoughts and ideas
-- Technical points to cover
-- Code examples or commands
-- Conclusions or takeaways
-- Links to reference
-- Random observations
-
-Don't require organization. The mess is the input.
+Input: unstructured brain dump of ideas, talking points, code examples, links, and conclusions. Don't require organization.
 
 ### 2. Read Voice and Tone
 
@@ -109,21 +101,16 @@ Show the post to the user for feedback and iterate.
 ### Do:
 - Write like talking to a peer over coffee
 - Admit uncertainty or being wrong
-- Use specific examples with details
-- Vary sentence and paragraph length
-- Include inline code naturally
 - Show the journey, not just the destination
 - Use humor sparingly and self-aware
-- End with forward momentum
 
 ### Don't:
 - Use corporate or marketing speak
-- Pretend to have all answers
 - Be preachy or condescending
-- Over-explain basic concepts
 - Force humor or emojis
 - Hide mistakes or uncertainty
-- Write without specific examples
+
+See `references/voice-tone.md` for the full voice guide.
 
 ## Example Patterns
 
